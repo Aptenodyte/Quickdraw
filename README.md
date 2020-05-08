@@ -36,4 +36,18 @@ The results of the raid are saved into a file called `raidFile.txt`, and the for
 1) target url (target update time)
     a) trigger blank template url (trigger length)
 ```  
-It will also automatically generate a `trigger_list.txt` file, which can be used by KATT.
+It will also automatically generate a `trigger_list.txt` file, which can be used by KATT.  
+
+## Common Issues  
+
+> The script isn't detecting my Spyglass sheet  
+
+Make sure that the sheet is in the same directory as the script  
+
+> The generated raid has used the other update than what I selected  
+
+Make sure that you haven't supplied the update lengths on the Spyglass sheet backwards (you used the major length for the minor time, and vice versa). Also make sure that you have selected the correct update to generate for.
+
+> Even if I say that a region has already been tagged, I'm still asked about the same region again  
+
+Unfortunately, this is a bug that can occur sometimes. You can simply supply Y, until it moves on to the next region. This bug doesn't affect the quality of the targets or triggers.
