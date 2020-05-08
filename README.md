@@ -13,7 +13,7 @@ To run script:
 
 ## Use
 
-Upon running the script, you will be given the option to select a sheet, as well as set the parameters for the raid.  
+Upon running the script, you will be given the option to select a sheet that is in the same directory as the script, as well as set the parameters for the raid.  
 In order to save time when confirming targets, you can filter by embassies and WFE phrases. It is recommended to supply the following:  
 
 (Comma seperated) Ignore regions that have embassies with:   
