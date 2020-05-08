@@ -6,7 +6,7 @@ A script that will go through a Spyglass sheet and automatically generate raid t
 To run, download [Node.js](https://nodejs.org/en/), navigate to the project directory, and run the following:  
 
 To install dependencies:  
-`npm i opn, readline-sync, xlsx`  
+`npm i dependencies`  
 
 To run script:  
 `node quickdraw.js`  
