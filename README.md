@@ -17,7 +17,9 @@ Upon running the script, you will be given the option to select a sheet, as well
 In order to save time when confirming targets, you can filter by embassies and WFE phrases. It is recommended to supply the following:  
 
 (Comma seperated) Ignore regions that have embassies with:   
-`The Black Hawks, Doll Guldur, Frozen Circle, 3 Guys`  
+```
+The Black Hawks, Doll Guldur, Frozen Circle, 3 Guys
+```  
 
 (Comma seperated) Ignore regions that have these phrases in the WFE:  
 ```
