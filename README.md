@@ -40,9 +40,9 @@ It will also automatically generate a `trigger_list.txt` file, which can be used
 
 ## Common Issues  
 
-> The script isn't detecting my Spyglass sheet  
+> I'm getting the error message `"items" must be Array (max length: 35).`  
 
-Make sure that the sheet is in the same directory as the script  
+This means that no Spyglass sheet was detected in the same directory as the script. Make sure that you give it a Spyglass sheet to use.  
 
 > The generated raid has used the other update than what I selected  
 
