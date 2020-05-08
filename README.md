@@ -20,4 +20,6 @@ In order to save time when confirming targets, you can filter by embassies and W
 `The Black Hawks, Doll Guldur, Frozen Circle, 3 Guys`  
 
 (Comma seperated) Ignore regions that have these phrases in the WFE:  
-```[url=https://www.forum.the-black-hawks.org/, [url=http://forum.theeastpacific.com,  [url=https://www.nationstates.net/page=dispatch/id=485374], [url=https://discord.gg/XWvERyc, [url=https://forum.thenorthpacific.org, [url=https://discord.gg/Tghy5kW```
+```
+[url=https://www.forum.the-black-hawks.org/, [url=http://forum.theeastpacific.com,  [url=https://www.nationstates.net/page=dispatch/id=485374], [url=https://discord.gg/XWvERyc, [url=https://forum.thenorthpacific.org, [url=https://discord.gg/Tghy5kW
+```
