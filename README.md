@@ -1,5 +1,5 @@
 # Quickdraw
-A script that will go through a Spyglass sheet and automatically generate raid targets and triggers 
+A script that will go through a [Spyglass](https://github.com/khronion/Spyglass) sheet and automatically generate raid targets and triggers 
 
 ## Setup
 
@@ -36,7 +36,7 @@ The results of the raid are saved into a file called `raidFile.txt`, and the for
 1) target url (target update time)
     a) trigger blank template url (trigger length)
 ```  
-It will also automatically generate a `trigger_list.txt` file, which can be used by KATT.  
+It will also automatically generate a `trigger_list.txt` file, which can be used by [KATT](https://github.com/khronion/KATT).  
 
 ## Common Issues  
 
