@@ -17,6 +17,12 @@ fileArray.forEach(file => {
   }
 });
 
+//Stop the program from running if no sheet is found in the current directory
+if (sheetArray.length === 0) {
+  console.error("ERROR: NO SHEET FOUND IN THE CURRENT DIRECTORY");
+  process.kill(process.pid, "SIGTERM");
+}
+
 //Get raid parameters from user
 const sheet = XLSX.readFile(sheetArray[rls.keyInSelect(sheetArray, "Select a sheet")]);
 const minSwitch = rls.question("Minimum switch length: ");
@@ -30,6 +36,7 @@ let wfeFilter = rls.question("(Comma seperated) Ignore regions that have these p
 const update = updateArray[rls.keyInSelect(updateArray, "Choose an update to run")];
 
 //Properly split the embassy and WFE filters into an array to be used later
+//Also clean up the filters if they're left unused
 embassies = embassies.split(",");
 for (let i = 0; i < embassies.length; i++) {
   embassies[i] = embassies[i].trim();
@@ -37,6 +44,12 @@ for (let i = 0; i < embassies.length; i++) {
 wfeFilter = wfeFilter.split(",");
 for (let i = 0; i < wfeFilter.length; i++) {
   wfeFilter[i] = wfeFilter[i].trim();
+}
+if (embassies[0] === "") {
+  embassies[0] = "eijl3o2il21po21-0p1ojiqlksakox;l";
+}
+if (wfeFilter[0] === "") {
+  wfeFilter[0] = "OIWJQLKDWLK<WJQPOLKJQWLlqwwq0qwqwq0wqwp1kl";
 }
 
 //Get the actual name of the sheet in the excel file for use in the readCell function
@@ -90,7 +103,7 @@ for (let i = 2; i < sheetLength; i++) {
 
 //Create a trigger_list file that can be used with KATT, and a raidFile that contains the actual raid details
 let targNumber = 1;
-let url = ""
+let url = "";
 fs.writeFileSync("raidFile.txt", "");
 fs.writeFileSync("trigger_list.txt", "");
 
@@ -117,11 +130,9 @@ for (let i = 0; i < targetArray.length; i++) {
     }
   }
 
-  let oldI = i;
   //Sets the hasFoundTarg flag after finding a target
   if (hasFoundTarg) {
     //Open the prospect target in browser and ask the user whether or not it's been tagged already
-    i = prospect; //Push the targetArray iterator up to the switched region
     opn(`https://www.nationstates.net/region=${targetArray[i].name.slice(0, -1)}`);
     if (!rls.keyInYN(`${targNumber}. Has ${targetArray[i].name.slice(0, -1)} already been tagged: `)) {
       //Execute if the response "n" is given
@@ -140,12 +151,8 @@ for (let i = 0; i < targetArray.length; i++) {
         fs.appendFileSync("raidFile.txt", `    a) https://www.nationstates.net/template-overall=none/region=${triggerName.replace(/ /g, "_").toLowerCase()} (${timeDifference(readCell(`E${prospectTargPos}`), readCell(`E${findInSpyglass(currentTrigger.name)}`))}s)\n\n`);
         fs.appendFileSync("trigger_list.txt", `${triggerName}\n`);
       }
-    } else {
-      i = oldI; //Reset the iterator back to the current targ if there is no trigger; otherwise a full switch will occur instead of prompting for the next viable targ
-      i++; //If the region is already tagged,move onto the next region in the targetArray
+      i = prospect - 1; //Push the targetArray iterator up to the switched region
     }
-  } else {
-    i++; //If no trigger can be found, move onto the next region in the targetArray
   }
 }
 
