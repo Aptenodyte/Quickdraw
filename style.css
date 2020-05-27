@@ -1,5 +1,15 @@
-body, input, button, option, select {
-  background-color: #222;
-  color: #e6e6e6;
-  border-color: #e6e6e6;
+.regulated-input-length {
+  width: 10%;
+}
+
+.regulated-file-label-length {
+  width: 30%;
+}
+
+.regulated-select-length {
+  width: 15%;
+}
+
+.far {
+  color: black;
 }
