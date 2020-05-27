@@ -3,36 +3,112 @@
   <head>
     <meta charset="utf-8" />
     <title>Quickdraw-Web</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <h1>Quickdraw-Web</h1>
-    <label for="sheet">Select a sheet:</label>
-    <input type="file" accept=".xlsx" id="sheet" /><br /><br />
-    <label for="targAmount">Amount of targets:</label>
-    <input type="number" id="targAmount" /><br /><br />
-    <label for="minSwitch">Minimum switch length:</label>
-    <input type="number" id="minSwitch" /><br /><br />
-    <label for="optimSwitch">Optimum switch length:</label>
-    <input type="number" id="optimSwitch" /><br /><br />
-    <label for="minTrigger">Minum trigger length:</label>
-    <input type="number" id="minTrigger" /><br /><br />
-    <label for="optimTrigger">Optimum trigger length:</label>
-    <input type="number" id="optimTrigger" /><br /><br />
-    <label for="maxTrigger">Maximum trigger length:</label>
-    <input type="number" id="maxTrigger" /><br /><br />
-    <label for="endos">Endorsements on point:</label>
-    <input type="number" id="endos" /><br /><br />
-    <label for="embassies">(Comma seperated) Ignore regions that have embassies with:</label>
-    <input type="text" id="embassies" /> <button type="button" id="defaultEmbassies">Use defaults</button><br /><br />
-    <label for="wfeFilter">(Comma seperated) Ignore regions that have these phrases in the WFE:</label>
-    <input type="text" id="wfeFilter" /> <button type="button" id="defaultWfeFilter">Use defaults</button><br /><br />
-    <label for="update">Update:</label>
-    <select id="update">
-      <option value="Major">Major</option>
-      <option value="Minor">Minor</option>
-    </select><br /><br />
-    <button type="button" id="start">Start finding targets</button>
+    <div class="container-sm">
+      <h1 class="pt-4 pb-4">Quickdraw-Web</h1>
+      <form onsubmit="return false">
+        <div class="custom-file mb-3">
+          <input id="sheet" type="file" accept=".xlsx" class="custom-file-input form-control-lg" />
+          <label for="sheet" class="custom-file-label regulated-file-label-length">Select a sheet</label>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Number of targets</span>
+          </div>
+          <div class="regulated-input-length">
+            <input id="targAmount" type="number" class="form-control" />
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Minimum switch length</span>
+          </div>
+          <div class="regulated-input-length">
+            <input id="minSwitch" type="number" class="form-control" />
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Optimum switch length</span>
+          </div>
+          <div class="regulated-input-length">
+            <input id="optimSwitch" type="number" class="form-control" />
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Minimum trigger length</span>
+          </div>
+          <div class="regulated-input-length">
+            <input id="minTrigger" type="number" class="form-control" />
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Optimum trigger length</span>
+          </div>
+          <div class="regulated-input-length">
+            <input id="optimTrigger" type="number" class="form-control" />
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Maximum trigger length</span>
+          </div>
+          <div class="regulated-input-length">
+            <input id="maxTrigger" type="number" class="form-control" />
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Endorsements on point</span>
+          </div>
+          <div class="regulated-input-length">
+            <input id="endos" type="number" class="form-control" />
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Ignore embassies</span>
+          </div>
+          <input id="embassies" type="text" class="form-control" placeholder="Ignore regions that have embassies with these regions" />
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Ignore phrases</span>
+          </div>
+          <input id="wfeFilter" type="text" class="form-control" placeholder="Ignore regions that have these phrases in the WFE" />
+        </div>
+        <select name="update" id="update" class="custom-select mb-3 regulated-select-length">
+          <option selected>Choose update</option>
+          <option value="Major">Major</option>
+          <option value="Minor">Minor</option>
+        </select>
+        <div class="custom-control custom-switch mb-3">
+          <input type="checkbox" class="custom-control-input" id="defaultEmbassies">
+          <label class="custom-control-label" for="defaultEmbassies">Use default embassy filters <i data-toggle="tooltip" data-placement="right" title="Filters out embassies usually found on raided regions"><i class="far fa-question-circle"></i></i></label>
+        </div>
+        <div class="custom-control custom-switch mb-3">
+          <input type="checkbox" class="custom-control-input" id="defaultWfeFilter">
+          <label class="custom-control-label" for="defaultWfeFilter">Use default WFE filters <i data-toggle="tooltip" data-placement="right" title="Filters out phrases common in raided regions wfe's"><i class="far fa-question-circle"></i></i></label>
+        </div>
+      </form>
+      <div class="btn-group">
+        <button type="submit" id="start" class="btn btn-primary"><i class='fas fa-crosshairs'></i> Find targets</button>
+      </div>
+      <div class="btn-group">
+        <button type="reset" id="reset" class="btn btn-danger"><i class="fas fa-trash"></i> Clear fields</button>
+      </div>
+    </div>
+    <div class="mb-4">
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
     <script src="script.js"></script>
   </body>

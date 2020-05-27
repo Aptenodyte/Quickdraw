@@ -1,6 +1,19 @@
 //Web JS
-document.getElementById("defaultEmbassies").addEventListener("click", fillDefaultEmbassies);
-document.getElementById("defaultWfeFilter").addEventListener("click", fillDefaultWfeFilter);
+document.getElementById("defaultEmbassies").addEventListener("change", fillDefaultEmbassies);
+document.getElementById("defaultWfeFilter").addEventListener("change", fillDefaultWfeFilter);
+
+document.getElementById("reset").addEventListener("click", clearInputFields);
+
+//JQuery for displaying the filename on upload
+$(".custom-file-input").on("change", function() {
+  const fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
+//Enable all tooltips
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
 
 function fillDefaultEmbassies() {
   document.getElementById("embassies").value = "The Black Hawks, Doll Guldur, Frozen Circle, 3 Guys";
@@ -8,6 +21,19 @@ function fillDefaultEmbassies() {
 
 function fillDefaultWfeFilter() {
   document.getElementById("wfeFilter").value = "[url=https://www.forum.the-black-hawks.org/, [url=http://forum.theeastpacific.com,  [url=https://www.nationstates.net/page=dispatch/id=485374], [url=https://discord.gg/XWvERyc, [url=https://forum.thenorthpacific.org, [url=https://discord.gg/Tghy5kW, [url=https://www.westpacific.org";
+}
+
+function clearInputFields() {
+  document.getElementById("minSwitch").value = "";
+  document.getElementById("optimSwitch").value = "";
+  document.getElementById("minTrigger").value = "";
+  document.getElementById("optimTrigger").value = "";
+  document.getElementById("maxTrigger").value = "";
+  document.getElementById("endos").value = "";
+  document.getElementById("targAmount").value = "";
+  document.getElementById("embassies").value = "";
+  document.getElementById("wfeFilter").value = "";
+  document.getElementById("update").value = "";
 }
 
 //Actual program JS
@@ -120,10 +146,10 @@ function mainProgram() {
 
       //Go through the switchArray generated for the currentTarget, and check if any of them have triggers
       //If they don't, use the only switchArray item
+      currentTrigger = findTriggers(targetArray[i].regionNumber, targetArray[i].updateTime);
       for (let i = 0; i < nextTargArray.length; i++) {
         prospect = findInTargets(nextTargArray[i].name);
         prospectTargPos = targetArray[prospect].regionNumber;
-        currentTrigger = findTriggers(prospectTargPos, targetArray[prospect].updateTime);
 
         //Exit the loop if we have found a trigger
         if (currentTrigger !== undefined) {
@@ -141,16 +167,17 @@ function mainProgram() {
 
           //Various formatting things for the purpose of generating links
           const targName = targetArray[i].name.slice(0, -1);
+          const currentTargPos = targetArray[i].regionNumber;
           const triggerName = ((currentTrigger.name.slice(-1) === "~") || (currentTrigger.name.slice(-1) === "*")) ? currentTrigger.name.slice(0, -1) : currentTrigger.name;
 
           //Add the target and trigger into raidFile, and the trigger region's into trigger_list
           if (update === "Major") {
-            raidFileData += `${targNumber++}) https://www.nationstates.net/region=${targName.replace(/ /g, "_").toLowerCase()} (${readCell(`F${prospectTargPos}`)})\n`;
-            raidFileData += `    a) https://www.nationstates.net/template-overall=none/region=${triggerName.replace(/ /g, "_").toLowerCase()} (${timeDifference(readCell(`F${prospectTargPos}`), readCell(`F${findInSpyglass(currentTrigger.name)}`))}s)\n\n`;
+            raidFileData += `${targNumber++}) https://www.nationstates.net/region=${targName.replace(/ /g, "_").toLowerCase()} (${readCell(`F${currentTargPos}`)})\n`;
+            raidFileData += `    a) https://www.nationstates.net/template-overall=none/region=${triggerName.replace(/ /g, "_").toLowerCase()} (${timeDifference(readCell(`F${currentTargPos}`), readCell(`F${findInSpyglass(currentTrigger.name)}`))}s)\n\n`;
             triggerListData += `${triggerName}\n`;
           } else {
-            raidFileData += `${targNumber++}) https://www.nationstates.net/region=${targName.replace(/ /g, "_").toLowerCase()} (${readCell(`E${prospectTargPos}`)})\n`;
-            raidFileData += `    a) https://www.nationstates.net/template-overall=none/region=${triggerName.replace(/ /g, "_").toLowerCase()} (${timeDifference(readCell(`E${prospectTargPos}`), readCell(`E${findInSpyglass(currentTrigger.name)}`))}s)\n\n`;
+            raidFileData += `${targNumber++}) https://www.nationstates.net/region=${targName.replace(/ /g, "_").toLowerCase()} (${readCell(`E${currentTargetPos}`)})\n`;
+            raidFileData += `    a) https://www.nationstates.net/template-overall=none/region=${triggerName.replace(/ /g, "_").toLowerCase()} (${timeDifference(readCell(`E${currentTargPos}`), readCell(`E${findInSpyglass(currentTrigger.name)}`))}s)\n\n`;
             triggerListData += `${triggerName}\n`;
           }
           i = prospect - 1; //Push the targetArray iterator up to the switched region
