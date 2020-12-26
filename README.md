@@ -1,47 +1,24 @@
 # Quickdraw
-A script that will go through a [Spyglass](https://github.com/khronion/Spyglass) sheet and automatically generate raid targets and triggers 
 
-## Setup
+A script that will go through a [Spyglass](https://github.com/khronion/Spyglass) sheet and automatically generate raid targets and triggers
 
-To run, download [Node.js](https://nodejs.org/en/), navigate to the project directory, and run the following:  
+## Usage
 
-To install dependencies:  
-`npm i`  
+The tool is located [here](https://aptenodyte.github.io/Quickdraw/). The site is pretty self-explanatory, and all times are to be given in seconds. Quickdraw is now completely browser based, and as such, no longer offers a CLI app.  
 
-To run script:  
-`node quickdraw.js`  
-
-## Use
-
-Upon running the script, you will be given the option to select a sheet that is in the same directory as the script, as well as set the parameters for the raid.  
-In order to save time when confirming targets, you can filter by embassies and WFE phrases. It is recommended to supply the following:  
-
-(Comma seperated) Ignore regions that have embassies with:   
-```
-The Black Hawks, Doll Guldur, Frozen Circle, 3 Guys
-```  
-
-(Comma seperated) Ignore regions that have these phrases in the WFE:  
-```
-[url=https://www.forum.the-black-hawks.org/, [url=http://forum.theeastpacific.com,  [url=https://www.nationstates.net/page=dispatch/id=485374], [url=https://discord.gg/XWvERyc, [url=https://forum.thenorthpacific.org, [url=https://discord.gg/Tghy5kW, [url=https://www.westpacific.org
-```  
-
-After this, the script will open a region page in your browser, and ask you to confirm whether or not the region is a good target. This will generally be in the format of:  
-`(target number). Has (target) already been tagged [y/n]:`  
-
-At any point, you may close out of the script once you feel it has set enough targets for you. If you do not close out of the script, it will keep going until it reaches the end of the Spyglass sheet, at which point it will close itself.  
-
-The results of the raid are saved into a file called `raidFile.txt`, and the format of the triggers is:  
+After selecting your targets, you will be given the option to download two files. One is called `raidFile.txt`, and contains a list of targets and triggers organized in the following format:
 ```
 1) target url (target update time)
     a) trigger blank template url (trigger length)
-```  
-It will also automatically generate a `trigger_list.txt` file, which can be used by [KATT](https://github.com/khronion/KATT).  
+```
+There is also an option to download a file called `trigger_list.txt`, which contains a list of triggers for use with [KATT](https://github.com/khronion/KATT).
 
-## Common Issues  
+## Running a local copy
 
+It is possible to keep a local copy of Quickdraw on your own computer. To do this, switch to the `gh-pages` branch, and download a zip of the files on that branch.  
 
-> The generated raid has used the other update than what I selected  
+Unfortunately, Quickdraw makes use of ES6 modules, which cannot be loaded via `file://` protocol; modules must be served over HTTP(S) in order to load properly. This means that you cannot just open `index.html` and use the tool. Instead, you have to use some sort of local web-server to use Quickdraw properly, such as [static-server](https://www.npmjs.com/package/static-server#getting-started), or some similar feature in your code editor (such as [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) for VS Code).
 
-Make sure that you haven't supplied the update lengths on the Spyglass sheet backwards (you used the major length for the minor time, and vice versa). Also make sure that you have selected the correct update to generate for.
+## Issues
 
+In case of a bug or a feature request, either create an [issue](https://github.com/Aptenodyte/Quickdraw/issues), or contact me at Zizou#4903 on Discord.
