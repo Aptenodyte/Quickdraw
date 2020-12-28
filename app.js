@@ -1,3 +1,19 @@
+/**
+ * Quickdraw - A NationStates utility to help quickly organize tag raids
+ * Copyright (C) 2020  Zizou
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,7 +62,7 @@ function initModalUpdater(confirmationModal, updateLength, targetFinder) {
             // there will always be somebody who tries to run the program again after
             // running it once. When that happens, everything fucking breaks, an
             // orphan dies in a blood sacrifice ritual to a cult, and I burn my
-            // fingers off in liquid nitrogen out of shame for creating this fuckery.
+            // fingers off in liquid nitrogen.
             downloadModalDiv.addEventListener("hidden.bs.modal", () => window.location.reload());
             return;
         }
@@ -107,20 +123,28 @@ function main(ev) {
                 continue;
             }
             if (!doApplyWfeFilters) {
-                let isHittable = true;
                 const regionWfe = spyglassSheet.readCell(`${wfeColumn}${i}`);
-                for (const filter of wfeFilters)
-                    if (regionWfe.includes(filter)) {
-                        isHittable = false;
-                        break;
+                // Ensure that no issues are cause by empty cells
+                if (regionWfe !== undefined) {
+                    let isHittable = true;
+                    for (const filter of wfeFilters)
+                        if (regionWfe.includes(filter)) {
+                            isHittable = false;
+                            break;
+                        }
+                    if (!isHittable) {
+                        regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
+                        continue;
                     }
-                if (!isHittable) {
-                    regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
-                    continue;
                 }
             }
             if (!doApplyEmbassyFilters) {
                 const regionEmbassiesString = spyglassSheet.readCell(`${embassiesColumn}${i}`);
+                // Fix glitch caused by empty embassy cells on regions without embassies
+                if (regionEmbassiesString === undefined) {
+                    regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, true));
+                    continue;
+                }
                 const regionEmbassies = regionEmbassiesString.split(",").map(embassy => embassy.toLowerCase());
                 const forbiddenEmbassies = embassyFilters.filter(embassy => regionEmbassies.includes(embassy));
                 regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, forbiddenEmbassies.length === 0));
