@@ -32,7 +32,8 @@ export function fillDefaultEmbassies() {
         "Doll Guldur",
         "Frozen Circle",
         "3 Guys",
-        "Plum Island"
+        "Plum Island",
+        "The Autumnal Court"
     ];
     const ignoreEmbassiesField = document.getElementById("ignoreEmbassies");
     ignoreEmbassiesField.value = DEFAULT_EMBASSY_FILTERS.join(", ");
@@ -51,7 +52,9 @@ export function fillDefaultPhrases() {
         "https://www.westpacific.org",
         "https://discord.gg/y4wrfg8",
         "https://discord.gg/m7qW9AS",
-        "https://lilystates.proboards.com" // Exclude Lily forums
+        "https://lilystates.proboards.com",
+        "https://forums.europeians.com/index.php",
+        "https://discord.gg/nYAwZ7f" // Exclude Euro Discord
     ];
     const ignorePhrasesField = document.getElementById("ignorePhrases");
     ignorePhrasesField.value = DEFAULT_PHRASE_FILTERS.join(", ");
