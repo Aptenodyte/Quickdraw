@@ -141,21 +141,29 @@ async function main(ev: Event) {
     }
 
     if (!doApplyWfeFilters) {
-      let isHittable = true;
       const regionWfe = spyglassSheet.readCell(`${wfeColumn}${i}`) as string;
-      for (const filter of wfeFilters)
-        if (regionWfe.includes(filter)) {
-          isHittable = false;
-          break;
+      // Ensure that no issues are cause by empty cells
+      if (regionWfe !== undefined) {
+        let isHittable = true;
+        for (const filter of wfeFilters)
+          if (regionWfe.includes(filter)) {
+            isHittable = false;
+            break;
+          }
+        if (!isHittable) {
+          regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
+          continue;
         }
-      if (!isHittable) {
-        regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
-        continue;
       }
     }
 
     if (!doApplyEmbassyFilters) {
       const regionEmbassiesString = spyglassSheet.readCell(`${embassiesColumn}${i}`) as string;
+      // Fix glitch caused by empty embassy cells on regions without embassies
+      if (regionEmbassiesString === undefined) {
+        regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, true));
+        continue;
+      }
       const regionEmbassies = regionEmbassiesString.split(",").map(embassy => embassy.toLowerCase());
       const forbiddenEmbassies = embassyFilters.filter(embassy => regionEmbassies.includes(embassy));
       regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, forbiddenEmbassies.length === 0));

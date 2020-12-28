@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
+    <title>Quickdraw</title>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <!-- Nice little heading at the top to display author and tool info -->
+      <div class="row border-bottom">
+        <div class="col-sm">
+          <h1>Quickdraw <small class="text-muted fs-6">v1.1.0</small></h1>
+        </div>
+        <div class="col-sm text-end pt-4">
+          <strong class="text-muted"><em>by <a class="text-reset" href="https://www.nationstates.net/nation=zizou" target="_blank" rel="noopener">Zizou</a>/<a class="text-reset" href="https://github.com/Aptenodyte" target="_blank" rel="noopener">Aptenodyte</a></em></strong>
+        </div>
+      </div>
+      <!-- The actual main form for submitting info -->
+      <form id="mainForm" class="mt-3">
+        <div class="row mb-3">
+          <label class="col-sm-1 col-form-label fw-bold" for="spyglassSheet">Sheet:</label>
+          <div class="col-sm-6">
+            <input type="file" class="form-control" id="spyglassSheetInput" accept=".xlsx" required />
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="targAmount" placeholder="0" min="1" required />
+              <label for="targAmount">Amount of targets</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="endoCount" placeholder="0" min="1" required />
+              <label for="endoCount">Endorsements on Point</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating">
+              <select class="form-select" id="updateTime" required>
+                <option value="major">Major</option>
+                <option value="minor">Minor</option>
+              </select>
+              <label for="updateTime">Update time</label>
+            </div>
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="minSwitch" placeholder="0" min="1" required />
+              <label for="minSwitch">Minimum switch length</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="optimSwitch" placeholder="0" min="1" required />
+              <label for="optimSwitch">Optimum switch length</label>
+            </div>
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="minTrigger" placeholder="0" min="1" required />
+              <label for="minTrigger">Minimum Trigger length</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="optimTrigger" placeholder="0" min="1" required />
+              <label for="minTrigger">Optimum Trigger length</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="maxTrigger" placeholder="0" min="1" required />
+              <label for="minTrigger">Maximum Trigger length</label>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="ignoreEmbassies" placeholder="Ignore Embassies - Comma seperated list of region embassies to respect" aria-label="A list of embassies to respect, which are comma seperated" aria-describedby="embassiesDescriptor" />
+          <button type="button" class="btn btn-outline-secondary" id="embassyDefaults">Fill Defaults</button>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="ignorePhrases" placeholder="Ignore Phrases - Comma seperated list of phrases in the WFE to respect" aria-label="A list of embassies to respect, which are comma seperated" aria-describedby="embassiesDescriptor" />
+          <button type="button" class="btn btn-outline-secondary" id="phraseDefaults">Fill Defaults</button>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          Find targets
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bullseye" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10zm0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>
+            <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+            <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+          </svg>
+        </button>
+        <button type="reset" class="btn btn-danger">
+          Clear fields
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+    <!-- Modal for showing the target -->
+    <div class="modal fade" id="targetConfirm" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Target Selection - <span id="updateProgress"></span>% through update</h5>
+          </div>
+          <div class="modal-body">
+            <p><span id="targetNum"></span>) <a href="#" target="_blank" rel="noopener noreferrer" id="targetLinkAnchor"></a> (<span id="targetTime"></span>)</p>
+            <p class="ml-3">a) <a href="#" target="_blank" rel="noopener noreferrer" id="triggerLinkAnchor"></a> (<span id="triggerLength"></span>s)</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="acceptTarget">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+              </svg>
+              Accept Target
+            </button>
+            <button type="button" class="btn btn-danger" id="declineTarget">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg>
+              Decline Target
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal for showing the download buttons -->
+    <div class="modal fade" id="raidDl" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Download Raid Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body mx-auto">
+            <button type="button" class="btn btn-primary btn-lg m-2" id="dlRaidFile">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-download-fill" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.5a.5.5 0 0 1 1 0V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0zm-.354 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V11h-1v3.293l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+              </svg>
+              Download Raid File
+            </button>
+            <button type="button" class="btn btn-primary btn-lg m-2" id="dlTriggerList">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-download-fill" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.5a.5.5 0 0 1 1 0V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0zm-.354 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V11h-1v3.293l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+              </svg>
+              Download trigger_list.txt
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap + popper bundle for site layout -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <!-- SheetJS library for reading spreadsheets -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.mini.min.js" integrity="sha384-0jHQKYfoySQNc/u/wt1gLoASYHo1tHv8p2x/Jm3c0hkdhqOUcb1DjRBPUyT1D3yN" crossorigin="anonymous"></script>
+    <!-- FileSaver.js for cross-browser file saving -->
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js" integrity="sha384-PlRSzpewlarQuj5alIadXwjNUX+2eNMKwr0f07ShWYLy8B6TjEbm7ZlcN/ScSbwy" crossorigin="anonymous"></script>
+    <!-- Actual Quickdraw script -->
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
