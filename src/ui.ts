@@ -24,7 +24,7 @@ export function fillDefaultEmbassies(): void {
     "Doll Guldur", 
     "Frozen Circle", 
     "3 Guys", 
-    "Lily"
+    "Plum Island"
   ];
   const ignoreEmbassiesField = document.getElementById("ignoreEmbassies")! as HTMLInputElement;
   ignoreEmbassiesField.value = DEFAULT_EMBASSY_FILTERS.join(", ");
@@ -42,6 +42,9 @@ export function fillDefaultPhrases(): void {
     "https://forum.thenorthpacific.org", // Exclude the TNP forums
     "https://discord.gg/Tghy5kW", // Exclude the 3 Guys Discord
     "https://www.westpacific.org", // Exclude TWP forums
+    "https://discord.gg/y4wrfg8", // Exclude Lily Discord
+    "https://discord.gg/m7qW9AS", // Exclude alt Lily Discord
+    "https://lilystates.proboards.com" // Exclude Lily forums
   ];
 
   const ignorePhrasesField = document.getElementById("ignorePhrases")! as HTMLInputElement;
