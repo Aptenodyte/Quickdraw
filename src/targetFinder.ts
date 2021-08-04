@@ -56,7 +56,7 @@ export function initTargetFinder (regionArray: Region[]): (prevTargAccepted: boo
       triggerPosition--
     }
 
-    while (targetTime - regionArray[triggerPosition].updateTime < maxTriggerLength) {
+    while (targetTime - regionArray[triggerPosition].updateTime <= maxTriggerLength) {
       if (triggerPosition === 0) { break }
       triggerProspects.push(regionArray[triggerPosition])
       triggerPosition--
@@ -78,7 +78,9 @@ export function initTargetFinder (regionArray: Region[]): (prevTargAccepted: boo
       regionArrayPosition++
       // Since we find all the switches between the ideal and minimum switch length,
       // if the ideal one is undesirable, we can go through the other switches we found
-      if (targetsFound.length !== 0) { return targetsFound.pop() } else {
+      if (targetsFound.length !== 0) {
+        return targetsFound.pop()
+      } else {
         while (regionArray[regionArrayPosition] !== undefined) {
           if (regionArray[regionArrayPosition].isHittable && (findTrigger() !== undefined)) {
             return new TargetInfo(regionArray[regionArrayPosition], findTrigger()!)
@@ -99,9 +101,11 @@ export function initTargetFinder (regionArray: Region[]): (prevTargAccepted: boo
         regionArrayPosition++
       }
 
-      while (regionArray[regionArrayPosition].updateTime - previousTargetUpdate < optimSwitchLength) {
+      let lastFoundTargetPosition = 0
+      while (regionArray[regionArrayPosition].updateTime - previousTargetUpdate <= optimSwitchLength) {
         if (regionArrayPosition > regionArray.length) { return undefined }
         if (regionArray[regionArrayPosition].isHittable && (findTrigger() !== undefined)) {
+          lastFoundTargetPosition = regionArrayPosition
           targetsFound.push(new TargetInfo(regionArray[regionArrayPosition], findTrigger()!))
         }
         regionArrayPosition++
@@ -117,6 +121,11 @@ export function initTargetFinder (regionArray: Region[]): (prevTargAccepted: boo
           regionArrayPosition++
         }
       } else {
+        // Keep track of lastFoundTargetPosition, or the target time will be recorded as the current regionArrayPosition
+        // which may actually be *past* the target, resulting in inaccurate previous target time when the targetFinder
+        // function is called again. That would cause the program to skip over perfectly valid targets because it
+        // thinks the switch time is too short.
+        regionArrayPosition = lastFoundTargetPosition
         return targetsFound.pop()
       }
       // And if we hit the end of updated, signal that update has ended
