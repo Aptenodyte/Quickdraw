@@ -1,6 +1,6 @@
 /**
  * Quickdraw - A NationStates utility to help quickly organize tag raids
- * Copyright (C) 2020  Zizou
+ * Copyright (C) 2021  Zizou
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -23,11 +23,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import * as ui from "./ui.js";
-import { SpyglassSheet } from "./sheet.js";
-import { Region, initTargetFinder } from "./targetFinder.js";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import * as ui from './ui.js';
+import { SpyglassSheet } from './sheet.js';
+import { Region, initTargetFinder } from './targetFinder.js';
 setup();
-// The confirmation modal instance must be passed into this function. 
+// The confirmation modal instance must be passed into this function.
 // Otherwise, there is no way of closing it.
 function initModalUpdater(confirmationModal, updateLength, targetFinder) {
     let i = 1;
@@ -36,8 +37,8 @@ function initModalUpdater(confirmationModal, updateLength, targetFinder) {
     let prevTriggerName;
     let prevTriggerUrl;
     let prevTriggerLength;
-    let raidFileText = "";
-    let triggerListText = "";
+    let raidFileText = '';
+    let triggerListText = '';
     return function updateModal(prevTargAccepted) {
         if (prevTargAccepted) {
             raidFileText += `${i}) ${prevRegionUrl} (${prevRegionUpdateTime})\n\ta) ${prevTriggerUrl} (${prevTriggerLength}s)\n\n`;
@@ -46,16 +47,16 @@ function initModalUpdater(confirmationModal, updateLength, targetFinder) {
         }
         const targetSearchResults = targetFinder(prevTargAccepted);
         if (targetSearchResults === undefined) {
-            const downloadModalDiv = document.getElementById("raidDl");
+            const downloadModalDiv = document.getElementById('raidDl');
             const downloadModal = new bootstrap.Modal(downloadModalDiv, {
-                backdrop: "static"
+                backdrop: 'static'
             });
-            const dlRaidFile = document.getElementById("dlRaidFile");
-            const raidFileBlob = new Blob([raidFileText], { type: "text/plain;charset=utf-8" });
-            dlRaidFile.addEventListener("click", () => saveAs(raidFileBlob, "raidFile.txt"));
-            const dlTriggerList = document.getElementById("dlTriggerList");
-            const triggerListBlob = new Blob([triggerListText], { type: "text/plain;charset=utf-8" });
-            dlTriggerList.addEventListener("click", () => saveAs(triggerListBlob, "trigger_list.txt"));
+            const dlRaidFile = document.getElementById('dlRaidFile');
+            const raidFileBlob = new Blob([raidFileText], { type: 'text/plain;charset=utf-8' });
+            dlRaidFile.addEventListener('click', () => saveAs(raidFileBlob, 'raidFile.txt'));
+            const dlTriggerList = document.getElementById('dlTriggerList');
+            const triggerListBlob = new Blob([triggerListText], { type: 'text/plain;charset=utf-8' });
+            dlTriggerList.addEventListener('click', () => saveAs(triggerListBlob, 'trigger_list.txt'));
             confirmationModal.hide();
             downloadModal.show();
             // Reload the window after we're done downloading because every time
@@ -63,7 +64,7 @@ function initModalUpdater(confirmationModal, updateLength, targetFinder) {
             // running it once. When that happens, everything fucking breaks, an
             // orphan dies in a blood sacrifice ritual to a cult, and I burn my
             // fingers off in liquid nitrogen.
-            downloadModalDiv.addEventListener("hidden.bs.modal", () => window.location.reload());
+            downloadModalDiv.addEventListener('hidden.bs.modal', () => window.location.reload());
             return;
         }
         const { region, trigger } = targetSearchResults;
@@ -75,45 +76,49 @@ function initModalUpdater(confirmationModal, updateLength, targetFinder) {
         prevTriggerUrl = triggerUrl;
         const triggerLength = region.updateTime - trigger.updateTime;
         prevTriggerLength = triggerLength;
-        window.open(regionUrl, "_blank");
+        window.open(regionUrl, '_blank');
         ui.updateModal(Math.round((region.regionNumber / updateLength) * 100), i, regionUrl, region.updateTimeString, triggerUrl, triggerLength);
     };
 }
 function main(ev) {
     return __awaiter(this, void 0, void 0, function* () {
         ev.preventDefault();
-        const updateSelector = document.getElementById("updateTime");
+        const updateSelector = document.getElementById('updateTime');
         const updatePeriod = updateSelector.value;
-        if (updatePeriod === "Choose update")
-            throw new Error("Please select an update");
-        const endoCountInput = document.getElementById("endoCount");
+        if (updatePeriod === 'Choose update') {
+            throw new Error('Please select an update');
+        }
+        const endoCountInput = document.getElementById('endoCount');
         const endoCount = +endoCountInput.value;
-        const embassyFiltersInput = document.getElementById("ignoreEmbassies");
-        const embassyFilters = embassyFiltersInput.value.split(",").map(filter => filter.trim().toLowerCase());
-        const wfeFiltersInput = document.getElementById("ignorePhrases");
-        const wfeFilters = wfeFiltersInput.value.split(",").map(filter => filter.trim());
-        const doApplyWfeFilters = (wfeFilters.length === 1) && (wfeFilters[0] === "");
-        const doApplyEmbassyFilters = (embassyFilters.length === 1) && (embassyFilters[0] === "");
-        const spyglassSheetInput = document.getElementById("spyglassSheetInput");
-        if (spyglassSheetInput.files.length !== 1)
-            throw new Error("Incorrect amount of files provided");
+        const embassyFiltersInput = document.getElementById('ignoreEmbassies');
+        const embassyFilters = embassyFiltersInput.value.split(',').map(filter => filter.trim().toLowerCase());
+        const wfeFiltersInput = document.getElementById('ignorePhrases');
+        const wfeFilters = wfeFiltersInput.value.split(',').map(filter => filter.trim());
+        const doApplyWfeFilters = (wfeFilters.length === 1) && (wfeFilters[0] === '');
+        const doApplyEmbassyFilters = (embassyFilters.length === 1) && (embassyFilters[0] === '');
+        const spyglassSheetInput = document.getElementById('spyglassSheetInput');
+        if (spyglassSheetInput.files.length !== 1) {
+            throw new Error('Incorrect amount of files provided');
+        }
         const spyglassSheet = yield SpyglassSheet.init(spyglassSheetInput.files[0]);
-        const nameColumn = "A";
-        const updateTimeColumn = (updatePeriod === "major") ? "F" : "E";
-        const delEndosColumn = "H";
-        const embassiesColumn = "I";
-        const wfeColumn = "J";
+        const nameColumn = 'A';
+        const updateTimeColumn = (updatePeriod === 'major') ? 'F' : 'E';
+        const delEndosColumn = 'H';
+        const embassiesColumn = 'I';
+        const wfeColumn = 'J';
         const regionArray = [];
         for (let i = 2; i < spyglassSheet.sheetLength; i++) {
             const regionNameCell = spyglassSheet.readCell(`${nameColumn}${i}`);
             let regionName;
             const regionUpdateTime = spyglassSheet.readTimeInSeconds(`${updateTimeColumn}${i}`);
             const regionUpdateTimeString = spyglassSheet.readCell(`${updateTimeColumn}${i}`);
-            if (regionNameCell.slice(-1) === "~" || regionNameCell.slice(-1) === "*")
+            if (regionNameCell.slice(-1) === '~' || regionNameCell.slice(-1) === '*') {
                 regionName = regionNameCell.slice(0, -1);
-            else
+            }
+            else {
                 regionName = regionNameCell;
-            if (regionNameCell.slice(-1) !== "~") {
+            }
+            if (regionNameCell.slice(-1) !== '~') {
                 regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
                 continue;
             }
@@ -127,11 +132,12 @@ function main(ev) {
                 // Ensure that no issues are cause by empty cells
                 if (regionWfe !== undefined) {
                     let isHittable = true;
-                    for (const filter of wfeFilters)
+                    for (const filter of wfeFilters) {
                         if (regionWfe.includes(filter)) {
                             isHittable = false;
                             break;
                         }
+                    }
                     if (!isHittable) {
                         regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
                         continue;
@@ -145,7 +151,7 @@ function main(ev) {
                     regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, true));
                     continue;
                 }
-                const regionEmbassies = regionEmbassiesString.split(",").map(embassy => embassy.toLowerCase());
+                const regionEmbassies = regionEmbassiesString.split(',').map(embassy => embassy.toLowerCase());
                 const forbiddenEmbassies = embassyFilters.filter(embassy => regionEmbassies.includes(embassy));
                 regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, forbiddenEmbassies.length === 0));
             }
@@ -154,16 +160,16 @@ function main(ev) {
             }
         }
         const targetFinder = initTargetFinder(regionArray);
-        const targetConfirmationModalDiv = document.getElementById("targetConfirm");
+        const targetConfirmationModalDiv = document.getElementById('targetConfirm');
         const targetConfirmationModal = new bootstrap.Modal(targetConfirmationModalDiv, {
-            backdrop: "static",
+            backdrop: 'static',
             keyboard: false
         });
         const updateModal = initModalUpdater(targetConfirmationModal, regionArray.length, targetFinder);
-        const acceptTargetButton = document.getElementById("acceptTarget");
-        const declineTargetButton = document.getElementById("declineTarget");
-        acceptTargetButton.addEventListener("click", updateModal.bind(null, true));
-        declineTargetButton.addEventListener("click", updateModal.bind(null, false));
+        const acceptTargetButton = document.getElementById('acceptTarget');
+        const declineTargetButton = document.getElementById('declineTarget');
+        acceptTargetButton.addEventListener('click', updateModal.bind(null, true));
+        declineTargetButton.addEventListener('click', updateModal.bind(null, false));
         updateModal(false);
         targetConfirmationModal.show();
     });
@@ -177,11 +183,11 @@ function setup() {
     window.onunhandledrejection = (event) => {
         alert(`${event.reason}\n Please check the console for the full error`);
     };
-    const fillDefaultEmbassiesButton = document.getElementById("embassyDefaults");
-    const fillDefaultPhrasesButton = document.getElementById("phraseDefaults");
-    fillDefaultEmbassiesButton.addEventListener("click", ui.fillDefaultEmbassies);
-    fillDefaultPhrasesButton.addEventListener("click", ui.fillDefaultPhrases);
-    const mainForm = document.getElementById("mainForm");
-    mainForm.addEventListener("submit", main);
+    const fillDefaultEmbassiesButton = document.getElementById('embassyDefaults');
+    const fillDefaultPhrasesButton = document.getElementById('phraseDefaults');
+    fillDefaultEmbassiesButton.addEventListener('click', ui.fillDefaultEmbassies);
+    fillDefaultPhrasesButton.addEventListener('click', ui.fillDefaultPhrases);
+    const mainForm = document.getElementById('mainForm');
+    mainForm.addEventListener('submit', main); // eslint-disable-line @typescript-eslint/no-misused-promises
 }
 //# sourceMappingURL=app.js.map

@@ -1,6 +1,6 @@
 /**
  * Quickdraw - A NationStates utility to help quickly organize tag raids
- * Copyright (C) 2020  Zizou
+ * Copyright (C) 2021  Zizou
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -23,41 +23,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * Fills the default embassy filters for the "Ignore Embassies" field
  */
 export function fillDefaultEmbassies() {
     const DEFAULT_EMBASSY_FILTERS = [
-        "The Black Hawks",
-        "Doll Guldur",
-        "Frozen Circle",
-        "3 Guys",
-        "Plum Island",
-        "The Autumnal Court"
+        'The Black Hawks',
+        'Doll Guldur',
+        'Frozen Circle',
+        '3 Guys',
+        'Plum Island',
+        'The Autumnal Court'
     ];
-    const ignoreEmbassiesField = document.getElementById("ignoreEmbassies");
-    ignoreEmbassiesField.value = DEFAULT_EMBASSY_FILTERS.join(", ");
+    const ignoreEmbassiesField = document.getElementById('ignoreEmbassies');
+    ignoreEmbassiesField.value = DEFAULT_EMBASSY_FILTERS.join(', ');
 }
 /**
  * Fills the default WFE filters for the "Ignore phrases" field
  */
 export function fillDefaultPhrases() {
     const DEFAULT_PHRASE_FILTERS = [
-        "https://www.forum.the-black-hawks.org",
-        "http://forum.theeastpacific.com",
-        "https://www.nationstates.net/page=dispatch/id=485374",
-        "https://discord.gg/XWvERyc",
-        "https://forum.thenorthpacific.org",
-        "https://discord.gg/Tghy5kW",
-        "https://www.westpacific.org",
-        "https://discord.gg/y4wrfg8",
-        "https://discord.gg/m7qW9AS",
-        "https://lilystates.proboards.com",
-        "https://forums.europeians.com/index.php",
-        "https://discord.gg/nYAwZ7f" // Exclude Euro Discord
+        'https://www.forum.the-black-hawks.org',
+        'http://forum.theeastpacific.com',
+        'https://www.nationstates.net/page=dispatch/id=485374',
+        'https://discord.gg/XWvERyc',
+        'https://forum.thenorthpacific.org',
+        'https://discord.gg/Tghy5kW',
+        'https://www.westpacific.org',
+        'https://discord.gg/y4wrfg8',
+        'https://discord.gg/m7qW9AS',
+        'https://lilystates.proboards.com',
+        'https://forums.europeians.com/index.php',
+        'https://discord.gg/nYAwZ7f' // Exclude Euro Discord
     ];
-    const ignorePhrasesField = document.getElementById("ignorePhrases");
-    ignorePhrasesField.value = DEFAULT_PHRASE_FILTERS.join(", ");
+    const ignorePhrasesField = document.getElementById('ignorePhrases');
+    ignorePhrasesField.value = DEFAULT_PHRASE_FILTERS.join(', ');
 }
 /**
  * Fills the given progress bar to the specified percentage
@@ -67,9 +68,10 @@ export function fillDefaultPhrases() {
 export function updateProgressBar(bar, percentage) {
     bar.style.width = `${percentage}%`;
     bar.innerText = `${percentage}%`;
-    bar.setAttribute("aria-valuenow", percentage.toString());
-    if (percentage === 100)
-        bar.classList.remove("progress-bar-striped", "progress-bar-animated");
+    bar.setAttribute('aria-valuenow', percentage.toString());
+    if (percentage === 100) {
+        bar.classList.remove('progress-bar-striped', 'progress-bar-animated');
+    }
 }
 /**
  * A function that has an asynchronous delay of the given amount of milliseconds
@@ -77,7 +79,7 @@ export function updateProgressBar(bar, percentage) {
  */
 export function delay(ms) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return yield new Promise(resolve => setTimeout(resolve, ms));
     });
 }
 /**
@@ -90,22 +92,22 @@ export function delay(ms) {
  * @param triggerLen The lenght of the trigger
  */
 export function updateModal(updatePercentage, targetNumber, targetUrl, targetUpdate, triggerUrl, triggerLen) {
-    const updateProgress = document.getElementById("updateProgress");
+    const updateProgress = document.getElementById('updateProgress');
     updateProgress.innerText = updatePercentage.toString();
-    const targetNum = document.getElementById("targetNum");
+    const targetNum = document.getElementById('targetNum');
     targetNum.innerText = targetNumber.toString();
-    const targetLinkAnchor = document.getElementById("targetLinkAnchor");
+    const targetLinkAnchor = document.getElementById('targetLinkAnchor');
     targetLinkAnchor.textContent = targetUrl;
     targetLinkAnchor.href = targetUrl;
-    const targetTime = document.getElementById("targetTime");
+    const targetTime = document.getElementById('targetTime');
     targetTime.innerText = targetUpdate;
-    const triggerLinkAnchor = document.getElementById("triggerLinkAnchor");
+    const triggerLinkAnchor = document.getElementById('triggerLinkAnchor');
     triggerLinkAnchor.textContent = triggerUrl;
     triggerLinkAnchor.href = triggerUrl;
-    const triggerLength = document.getElementById("triggerLength");
+    const triggerLength = document.getElementById('triggerLength');
     triggerLength.innerText = triggerLen.toString();
 }
 export function sanitize(text) {
-    return text.trim().replace(/ /g, "_").toLowerCase();
+    return text.trim().replace(/ /g, '_').toLowerCase();
 }
 //# sourceMappingURL=ui.js.map

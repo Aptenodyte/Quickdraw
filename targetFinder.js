@@ -1,6 +1,6 @@
 /**
  * Quickdraw - A NationStates utility to help quickly organize tag raids
- * Copyright (C) 2020  Zizou
+ * Copyright (C) 2021  Zizou
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 export class Region {
     constructor(regionNumber, name, updateTime, updateTimeString, isHittable) {
         this.regionNumber = regionNumber;
@@ -30,12 +31,12 @@ export class TargetInfo {
     }
 }
 export function initTargetFinder(regionArray) {
-    const targAmount = +document.getElementById("targAmount").value;
-    const minSwitchLength = +document.getElementById("minSwitch").value;
-    const optimSwitchLength = +document.getElementById("optimSwitch").value;
-    const minTriggerLength = +document.getElementById("minTrigger").value;
-    const optimTriggerLength = +document.getElementById("optimTrigger").value;
-    const maxTriggerLength = +document.getElementById("maxTrigger").value;
+    const targAmount = +document.getElementById('targAmount').value;
+    const minSwitchLength = +document.getElementById('minSwitch').value;
+    const optimSwitchLength = +document.getElementById('optimSwitch').value;
+    const minTriggerLength = +document.getElementById('minTrigger').value;
+    const optimTriggerLength = +document.getElementById('optimTrigger').value;
+    const maxTriggerLength = +document.getElementById('maxTrigger').value;
     let regionArrayPosition = 0;
     let amountOfTargsFound = 0;
     let targetsFound = [];
@@ -44,13 +45,15 @@ export function initTargetFinder(regionArray) {
         let triggerPosition = regionArrayPosition;
         const targetTime = regionArray[regionArrayPosition].updateTime;
         while (targetTime - regionArray[triggerPosition].updateTime < minTriggerLength) {
-            if (triggerPosition === 0)
+            if (triggerPosition === 0) {
                 return undefined;
+            }
             triggerPosition--;
         }
-        while (targetTime - regionArray[triggerPosition].updateTime < maxTriggerLength) {
-            if (triggerPosition === 0)
+        while (targetTime - regionArray[triggerPosition].updateTime <= maxTriggerLength) {
+            if (triggerPosition === 0) {
                 break;
+            }
             triggerProspects.push(regionArray[triggerPosition]);
             triggerPosition--;
         }
@@ -68,48 +71,66 @@ export function initTargetFinder(regionArray) {
             regionArrayPosition++;
             // Since we find all the switches between the ideal and minimum switch length,
             // if the ideal one is undesirable, we can go through the other switches we found
-            if (targetsFound.length !== 0)
+            if (targetsFound.length !== 0) {
                 return targetsFound.pop();
-            else
+            }
+            else {
                 while (regionArray[regionArrayPosition] !== undefined) {
-                    if (regionArray[regionArrayPosition].isHittable && (findTrigger() !== undefined))
+                    if (regionArray[regionArrayPosition].isHittable && (findTrigger() !== undefined)) {
                         return new TargetInfo(regionArray[regionArrayPosition], findTrigger());
+                    }
                     regionArrayPosition++;
                 }
+            }
         }
         else {
             targetsFound = [];
             amountOfTargsFound++;
             // If we've found all the targets, end
-            if (amountOfTargsFound === targAmount)
+            if (amountOfTargsFound === targAmount) {
                 return undefined;
+            }
             const previousTargetUpdate = regionArray[regionArrayPosition].updateTime;
             regionArrayPosition++;
             while (regionArray[regionArrayPosition].updateTime - previousTargetUpdate < minSwitchLength) {
-                if (regionArrayPosition > regionArray.length)
+                if (regionArrayPosition > regionArray.length) {
                     return undefined;
+                }
                 regionArrayPosition++;
             }
-            while (regionArray[regionArrayPosition].updateTime - previousTargetUpdate < optimSwitchLength) {
-                if (regionArrayPosition > regionArray.length)
+            let lastFoundTargetPosition = 0;
+            while (regionArray[regionArrayPosition].updateTime - previousTargetUpdate <= optimSwitchLength) {
+                if (regionArrayPosition > regionArray.length) {
                     return undefined;
-                if (regionArray[regionArrayPosition].isHittable && (findTrigger() !== undefined))
+                }
+                if (regionArray[regionArrayPosition].isHittable && (findTrigger() !== undefined)) {
+                    lastFoundTargetPosition = regionArrayPosition;
                     targetsFound.push(new TargetInfo(regionArray[regionArrayPosition], findTrigger()));
+                }
                 regionArrayPosition++;
             }
             // If no switches are found between the minimum switch length and optimum
             // switch length, just grab the next switch with a trigger afterwards
-            if (targetsFound.length === 0)
+            if (targetsFound.length === 0) {
                 while (regionArray[regionArrayPosition] !== undefined) {
-                    if (regionArray[regionArrayPosition].isHittable && (findTrigger() !== undefined))
+                    if (regionArray[regionArrayPosition].isHittable && (findTrigger() !== undefined)) {
                         return new TargetInfo(regionArray[regionArrayPosition], findTrigger());
+                    }
                     regionArrayPosition++;
                 }
-            else
+            }
+            else {
+                // Keep track of lastFoundTargetPosition, or the target time will be recorded as the current regionArrayPosition
+                // which may actually be *past* the target, resulting in inaccurate previous target time when the targetFinder
+                // function is called again. That would cause the program to skip over perfectly valid targets because it
+                // thinks the switch time is too short.
+                regionArrayPosition = lastFoundTargetPosition;
                 return targetsFound.pop();
+            }
             // And if we hit the end of updated, signal that update has ended
-            if (regionArrayPosition > regionArray.length)
+            if (regionArrayPosition > regionArray.length) {
                 return undefined;
+            }
         }
     };
 }

@@ -1,6 +1,6 @@
 /**
  * Quickdraw - A NationStates utility to help quickly organize tag raids
- * Copyright (C) 2020  Zizou
+ * Copyright (C) 2021  Zizou
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -30,10 +30,12 @@ export class SpyglassSheet {
     // 90% of my brain power on figuring out how to get Typescript to play nice
     // with xlsx over cdn, so this is what we get lol.
     constructor(workbook) {
-        if (typeof workbook === "undefined")
-            throw new Error("Cannot instantiate Sheet class directly, use the init method instead");
-        if (workbook.SheetNames.length !== 1)
-            throw new Error("Wrong amount of sheets in workbook");
+        if (typeof workbook === 'undefined') {
+            throw new Error('Cannot instantiate Sheet class directly, use the init method instead');
+        }
+        if (workbook.SheetNames.length !== 1) {
+            throw new Error('Wrong amount of sheets in workbook');
+        }
         const firstSheetName = workbook.SheetNames[0];
         const firstSheet = workbook.Sheets[firstSheetName];
         this.spyglassSheet = firstSheet;
@@ -56,12 +58,12 @@ export class SpyglassSheet {
      */
     readCell(cellAddress) {
         const cellInSheet = this.spyglassSheet[cellAddress];
-        const cellValue = (cellInSheet ? cellInSheet.v : undefined);
+        const cellValue = (cellInSheet ? cellInSheet.v : undefined); // eslint-disable-line @typescript-eslint/strict-boolean-expressions
         return cellValue;
     }
     readTimeInSeconds(cellAddress) {
         const timeString = this.readCell(cellAddress);
-        const timeComponents = timeString.split(":");
+        const timeComponents = timeString.split(':');
         const hourSeconds = +timeComponents[0] * 3600;
         const minuteSeconds = +timeComponents[1] * 60;
         const seconds = +timeComponents[2];
@@ -69,8 +71,9 @@ export class SpyglassSheet {
     }
     getSheetLength() {
         let sheetLength = 1;
-        while (this.readCell(`A${sheetLength}`) !== undefined)
+        while (this.readCell(`A${sheetLength}`) !== undefined) {
             sheetLength++;
+        }
         return --sheetLength;
     }
     /**
@@ -81,10 +84,10 @@ export class SpyglassSheet {
         return __awaiter(this, void 0, void 0, function* () {
             const reader = new FileReader();
             reader.readAsArrayBuffer(sheet);
-            return new Promise(resolve => {
+            return yield new Promise(resolve => {
                 reader.onload = (sheet) => {
                     const data = new Uint8Array(sheet.target.result);
-                    const workbook = XLSX.read(data, { type: "array" });
+                    const workbook = XLSX.read(data, { type: 'array' });
                     resolve(workbook);
                 };
             });
