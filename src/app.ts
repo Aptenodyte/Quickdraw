@@ -201,6 +201,9 @@ function setup (): void {
   fillDefaultEmbassiesButton.addEventListener('click', ui.fillDefaultEmbassies)
   fillDefaultPhrasesButton.addEventListener('click', ui.fillDefaultPhrases)
 
+  const thornToggler = document.getElementById('thornButton')! as HTMLButtonElement
+  thornToggler.addEventListener('change', ui.toggleThornInputs)
+
   const mainForm = document.getElementById('mainForm')! as HTMLFormElement
   mainForm.addEventListener('submit', main) // eslint-disable-line @typescript-eslint/no-misused-promises
 }

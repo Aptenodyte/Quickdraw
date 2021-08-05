@@ -56,6 +56,17 @@ export function fillDefaultPhrases (): void {
   ignorePhrasesField.value = DEFAULT_PHRASE_FILTERS.join(', ')
 }
 
+export function toggleThornInputs (): void {
+  const thornInputDiv = document.getElementsByClassName('thornInputs')!
+  for (const element of thornInputDiv) {
+    if (element.hasAttribute('hidden')) {
+      element.removeAttribute('hidden')
+    } else {
+      element.setAttribute('hidden', '')
+    }
+  }
+}
+
 /**
  * Fills the given progress bar to the specified percentage
  * @param bar The progress bar to alter
