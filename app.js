@@ -1,6 +1,6 @@
 /**
  * Quickdraw - A NationStates utility to help quickly organize tag raids
- * Copyright (C) 2021  Zizou
+ * Copyright (C) 2022  Zizou
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -25,6 +25,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as ui from './ui.js';
+import { NsApi } from './api.js';
 import { SpyglassSheet } from './sheet.js';
 import { Region, initTargetFinder } from './targetFinder.js';
 setup();
@@ -83,19 +84,33 @@ function initModalUpdater(confirmationModal, updateLength, targetFinder) {
 function main(ev) {
     return __awaiter(this, void 0, void 0, function* () {
         ev.preventDefault();
+        const nsApi = new NsApi();
+        const userNationInput = document.getElementById('nationName');
+        const userNation = userNationInput.value;
+        nsApi.setUA(userNation);
         const updateSelector = document.getElementById('updateTime');
         const updatePeriod = updateSelector.value;
-        if (updatePeriod === 'Choose update') {
-            throw new Error('Please select an update');
-        }
         const endoCountInput = document.getElementById('endoCount');
         const endoCount = +endoCountInput.value;
+        const includeTagsInput = document.getElementById('includeTags');
+        const includeTags = includeTagsInput.value.split(',').map(tag => tag.trim().toLowerCase());
+        const excludeTagsInput = document.getElementById('excludeTags');
+        const excludeTags = excludeTagsInput.value.split(',').map(tag => tag.trim().toLowerCase());
+        let eligibleRegionTags = [];
+        if (includeTags.length + excludeTags.length > 10) {
+            throw new Error("Can't use more than 10 tag filters");
+        }
         const embassyFiltersInput = document.getElementById('ignoreEmbassies');
         const embassyFilters = embassyFiltersInput.value.split(',').map(filter => filter.trim().toLowerCase());
         const wfeFiltersInput = document.getElementById('ignorePhrases');
         const wfeFilters = wfeFiltersInput.value.split(',').map(filter => filter.trim());
-        const doApplyWfeFilters = (wfeFilters.length === 1) && (wfeFilters[0] === '');
-        const doApplyEmbassyFilters = (embassyFilters.length === 1) && (embassyFilters[0] === '');
+        const doApplyWfeFilters = !((wfeFilters.length === 1) && (wfeFilters[0] === ''));
+        const doApplyEmbassyFilters = !((embassyFilters.length === 1) && (embassyFilters[0] === ''));
+        const doApplyTagFilters = !(((includeTags.length === 1) && (excludeTags.length === 1)) && ((includeTags[0] === '') && (excludeTags[0] === '')));
+        // Avoid making frivolous API requests
+        if (doApplyTagFilters) {
+            eligibleRegionTags = yield nsApi.filterRegionsByTag(includeTags, excludeTags);
+        }
         const spyglassSheetInput = document.getElementById('spyglassSheetInput');
         if (spyglassSheetInput.files.length !== 1) {
             throw new Error('Incorrect amount of files provided');
@@ -112,22 +127,33 @@ function main(ev) {
             let regionName;
             const regionUpdateTime = spyglassSheet.readTimeInSeconds(`${updateTimeColumn}${i}`);
             const regionUpdateTimeString = spyglassSheet.readCell(`${updateTimeColumn}${i}`);
+            // Strip any Spyglass indicators from the region name
             if (regionNameCell.slice(-1) === '~' || regionNameCell.slice(-1) === '*') {
                 regionName = regionNameCell.slice(0, -1);
             }
             else {
                 regionName = regionNameCell;
             }
+            // Check if region is passworded
             if (regionNameCell.slice(-1) !== '~') {
                 regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
                 continue;
             }
+            // Check if the regions are exempted due to regional tag filters
+            if (doApplyTagFilters) {
+                if (!eligibleRegionTags.includes(regionName)) {
+                    regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
+                    continue;
+                }
+            }
+            // Check if delegate endos exceed raider endos
             const delEndos = +spyglassSheet.readCell(`${delEndosColumn}${i}`);
             if (endoCount <= delEndos) {
                 regionArray.push(new Region(i - 1, regionName, regionUpdateTime, regionUpdateTimeString, false));
                 continue;
             }
-            if (!doApplyWfeFilters) {
+            // Check if the region should be filtered out because of the WFE
+            if (doApplyWfeFilters) {
                 const regionWfe = spyglassSheet.readCell(`${wfeColumn}${i}`);
                 // Ensure that no issues are cause by empty cells
                 if (regionWfe !== undefined) {
@@ -144,7 +170,8 @@ function main(ev) {
                     }
                 }
             }
-            if (!doApplyEmbassyFilters) {
+            // Check if the region should be exempted because of its embassies
+            if (doApplyEmbassyFilters) {
                 const regionEmbassiesString = spyglassSheet.readCell(`${embassiesColumn}${i}`);
                 // Fix glitch caused by empty embassy cells on regions without embassies
                 if (regionEmbassiesString === undefined) {
