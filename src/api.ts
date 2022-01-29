@@ -52,6 +52,6 @@ export class NsApi {
     if (sanitizedNation === '') { throw new Error('User nation not properly set') }
     // Can't set UA in browser so append a script identifier as a get parameter instead
     // Also this looks really fucking stupid since both @ and . are reserved characters
-    NsApi.userAgent = `quickdraw_v_120_used_by_${sanitizedNation}_devved_by_zizou`
+    NsApi.userAgent = `quickdraw_v_121_used_by_${sanitizedNation}_devved_by_zizou`
   }
 }

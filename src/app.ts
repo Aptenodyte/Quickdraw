@@ -111,11 +111,9 @@ async function main (ev: Event): Promise<void> {
   const includeTags = includeTagsInput.value.split(',').map(tag => tag.trim().toLowerCase())
   const excludeTagsInput = document.getElementById('excludeTags')! as HTMLInputElement
   const excludeTags = excludeTagsInput.value.split(',').map(tag => tag.trim().toLowerCase())
+  const strictTagsCheck = document.getElementById('strictTags')! as HTMLInputElement
+  const strictTags = strictTagsCheck.checked
   let eligibleRegionTags: string[] = []
-
-  if (includeTags.length + excludeTags.length > 10) {
-    throw new Error("Can't use more than 10 tag filters")
-  }
 
   const embassyFiltersInput = document.getElementById('ignoreEmbassies')! as HTMLInputElement
   const embassyFilters = embassyFiltersInput.value.split(',').map(filter => filter.trim().toLowerCase())
@@ -128,8 +126,28 @@ async function main (ev: Event): Promise<void> {
   const doApplyTagFilters = !(((includeTags.length === 1) && (excludeTags.length === 1)) && ((includeTags[0] === '') && (excludeTags[0] === '')))
 
   // Avoid making frivolous API requests
+  // Apply regional tag filters
   if (doApplyTagFilters) {
-    eligibleRegionTags = await nsApi.filterRegionsByTag(includeTags, excludeTags)
+    if (strictTags) {
+      if (includeTags.length + excludeTags.length > 10) {
+        throw new Error("Can't use more than 10 tag filters if all include tags must be present")
+      }
+      eligibleRegionTags = await nsApi.filterRegionsByTag(includeTags, excludeTags)
+    } else {
+      if (excludeTags.length > 9) {
+        throw new Error("Can't use more than 9 exclude tag filters if not all tags must be present")
+      }
+      // Don't use forEach in the initial loop because that gets fucky with await
+      // If the script ended up breaking rules because of that, Mira would probably behead me
+      for (const tag of includeTags) {
+        const apiResponse = await nsApi.filterRegionsByTag([tag], excludeTags)
+        apiResponse.forEach(region => {
+          if (!eligibleRegionTags.includes(region)) {
+            eligibleRegionTags.push(region)
+          }
+        })
+      }
+    }
   }
 
   const spyglassSheetInput = document.getElementById('spyglassSheetInput')! as HTMLInputElement
