@@ -1,6 +1,6 @@
 {
   "name": "quickdraw",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A NationStates utility to help quickly organize tag raids",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

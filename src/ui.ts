@@ -1,6 +1,6 @@
 /**
  * Quickdraw - A NationStates utility to help quickly organize tag raids
- * Copyright (C) 2021  Zizou
+ * Copyright (C) 2023  Zizou
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -23,11 +23,13 @@
 export function fillDefaultEmbassies (): void {
   const DEFAULT_EMBASSY_FILTERS = [
     'The Black Hawks',
-    'Doll Guldur',
-    'Frozen Circle',
-    '3 Guys',
+    'Valle De Arena',
+    'Ijaka',
+    'The Infinite Army',
+    'Leningrad Airfield',
+    'The Brotherhood of Malice',
     'Plum Island',
-    'The Autumnal Court'
+    'Suspicious'
   ]
   const ignoreEmbassiesField = document.getElementById('ignoreEmbassies')! as HTMLInputElement
   ignoreEmbassiesField.value = DEFAULT_EMBASSY_FILTERS.join(', ')
@@ -38,18 +40,10 @@ export function fillDefaultEmbassies (): void {
  */
 export function fillDefaultPhrases (): void {
   const DEFAULT_PHRASE_FILTERS = [
-    'https://www.forum.the-black-hawks.org', // Exclude the TBH forums
-    'http://forum.theeastpacific.com', // Exclude the TEP forums
-    'https://www.nationstates.net/page=dispatch/id=485374', // Exclude the NPA advertisement dispatch
-    'https://discord.gg/XWvERyc', // Exclude the TBH Discord server
-    'https://forum.thenorthpacific.org', // Exclude the TNP forums
-    'https://discord.gg/Tghy5kW', // Exclude the 3 Guys Discord
-    'https://www.westpacific.org', // Exclude TWP forums
-    'https://discord.gg/y4wrfg8', // Exclude Lily Discord
-    'https://discord.gg/m7qW9AS', // Exclude alt Lily Discord
-    'https://lilystates.proboards.com', // Exclude Lily forums
-    'https://forums.europeians.com/index.php', // Exclude the Euro forums
-    'https://discord.gg/nYAwZ7f' // Exclude Euro Discord
+    'https://discord.com/invite/brotherhoodofmalice',
+    'https://ijaka.xyz/discord',
+    'https://osiris.valthost.com/',
+    'https://www.forum.the-black-hawks.org/'
   ]
 
   const ignorePhrasesField = document.getElementById('ignorePhrases')! as HTMLInputElement
