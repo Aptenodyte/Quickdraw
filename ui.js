@@ -1,6 +1,6 @@
 /**
  * Quickdraw - A NationStates utility to help quickly organize tag raids
- * Copyright (C) 2021  Zizou
+ * Copyright (C) 2023  Zizou
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -30,11 +30,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 export function fillDefaultEmbassies() {
     const DEFAULT_EMBASSY_FILTERS = [
         'The Black Hawks',
-        'Doll Guldur',
-        'Frozen Circle',
-        '3 Guys',
+        'Valle De Arena',
+        'Ijaka',
+        'The Infinite Army',
+        'Leningrad Airfield',
+        'The Brotherhood of Malice',
         'Plum Island',
-        'The Autumnal Court'
+        'Suspicious'
     ];
     const ignoreEmbassiesField = document.getElementById('ignoreEmbassies');
     ignoreEmbassiesField.value = DEFAULT_EMBASSY_FILTERS.join(', ');
@@ -44,18 +46,10 @@ export function fillDefaultEmbassies() {
  */
 export function fillDefaultPhrases() {
     const DEFAULT_PHRASE_FILTERS = [
-        'https://www.forum.the-black-hawks.org',
-        'http://forum.theeastpacific.com',
-        'https://www.nationstates.net/page=dispatch/id=485374',
-        'https://discord.gg/XWvERyc',
-        'https://forum.thenorthpacific.org',
-        'https://discord.gg/Tghy5kW',
-        'https://www.westpacific.org',
-        'https://discord.gg/y4wrfg8',
-        'https://discord.gg/m7qW9AS',
-        'https://lilystates.proboards.com',
-        'https://forums.europeians.com/index.php',
-        'https://discord.gg/nYAwZ7f' // Exclude Euro Discord
+        'https://discord.com/invite/brotherhoodofmalice',
+        'https://ijaka.xyz/discord',
+        'https://osiris.valthost.com/',
+        'https://www.forum.the-black-hawks.org/'
     ];
     const ignorePhrasesField = document.getElementById('ignorePhrases');
     ignorePhrasesField.value = DEFAULT_PHRASE_FILTERS.join(', ');
